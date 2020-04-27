@@ -1,0 +1,159 @@
+﻿@using Jumpeno.JumpenoComponents.Game
+@using Jumpeno.JumpenoComponents.Entities
+@using Jumpeno.JumpenoComponents.Utilities
+@inject NavigationManager NavigationManager
+
+    <div class="container text-center bg-form">
+        <LoginDisplay />
+        <div class="jumbotron text-center align-content-center">
+            <h3>Lobby of "@Game.Name" - <span class="text-muted h4">@(InitialisingInfo.GameModeToString(Game.GameMode)) mode</span></h3>
+            <div class="d-flex">
+                <ul class="list-inline mx-auto justify-content-center" style="width: 50%;">
+                    <li>
+                        <div class="input-group p-1">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" id="btnGroupAddon">Game code</div>
+                            </div>
+                            <p class="form-control">@Game.Code</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-group p-1">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" id="btnGroupAddon">Game url</div>
+                            </div>
+                            <p class="form-control">@GetUrl()</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-group p-1">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text" id="btnGroupAddon">QR code</div>
+                            </div>
+                            <EjsQRCodeGenerator Width="150px" Height="150px" Value="@GetUrl()">
+                                <QRCodeGeneratorDisplayText Visibility="false"></QRCodeGeneratorDisplayText>
+                            </EjsQRCodeGenerator>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            @*<p class="text-muted">Game alive @Game.FramesToTime(Game.FPSElapsed)</p>*@
+            @if (Game.StartTimerRunning && !Game.StoppedStartTimer) {
+                <p class="text-info">Game starting in @Conversions.FramesToTime(Game.FramesToStart)</p>
+            } else {
+                <p class="text-info text-muted">Game starting in @Conversions.FramesToTime(Game.FramesToStart)</p>
+            }
+            @if (Game.DeleteTimerRunning) {
+                <p class="text-warning">Game is being deleted cause to inactivity.</p>
+            }
+        </div>
+
+        <div class="progress mb-3">
+            <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width:@(GetProgressBar())%">
+                Joined @Game.PlayersInLobby.Count/@Game.PlayersLimit
+            </div>
+        </div>
+
+        <table class="table mb-3" style="color: wheat;">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Badges</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Game.PlayersInLobby.Count; i++) {
+                    if (Game.PlayersInLobby[i] == Player) {
+                        <tr class="table-dark">
+                            <td>@(i + 1)</td>
+                            <td>@Player.Name</td>
+                            <td>
+                                @if (Player == Game.Creator) {
+                                    <span class="badge badge-pill badge-dark">Owner</span>
+                                }
+                            </td>
+                        </tr>
+                    } else {
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@Game.PlayersInLobby[i].Name</td>
+                            <td>
+                                @if (Game.PlayersInLobby[i] == Game.Creator) {
+                                    <span class="badge badge-pill badge-dark">Owner</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+
+        @*<ul class="mb-3">
+            @foreach (var player in Game.PlayersInLobby) {
+                <li>
+                    @if (player == Player) {
+                        <mark>@player.Name</mark>
+                    } else {
+                        if (player.InGame) {
+                            @player.Name <span class="badge badge-pill badge-info">In game</span>
+                        } else {
+                            @player.Name
+                        }
+                    }
+                    @if (player == Game.Creator) {
+                        <span class="badge badge-pill badge-dark">Owner</span>
+                    }
+                </li>
+            }
+        </ul>*@
+
+        @if (Game.Creator == Player) {
+            <div class="btn-group" role="group" aria-label="Creator options">
+                @if (Game.PlayersInLobby.Count > 1) {
+                    if (Game.GameMode == GameMode.PLAYER) {
+                        if (Game.StoppedStartTimer) {
+                            <button type="button" class="btn btn-info" @onclick="@SwitchTimer">Resume timer</button>
+                        } else {
+                            <button type="button" class="btn btn-info" @onclick="@SwitchTimer">Pause timer</button>
+                        }
+                    } else {
+                        if (Game.StartTimerRunning) {
+                            <button type="button" class="btn btn-info" @onclick="(() => Game.StartTimerRunning = false)">Stop timer</button>
+                        } else {
+                            <button type="button" class="btn btn-info" @onclick="(() => Game.StartTimerRunning = true)">Start timer</button>
+                        }
+                    }
+                    <button type="button" class="btn btn-success" @onclick="@StartGame">Start</button>
+                }
+                <button type="button" class="btn btn-danger" @onclick="@DeleteGame">Stop</button>
+            </div>
+        }
+        <button type="button" class="btn btn-warning" @onclick="@(() => LeaveLobby(true))">Leave</button>
+    </div>
+
+@code {
+    [Parameter]
+    public Player Player { get; set; }
+    [Parameter]
+    public Game Game { get; set; }
+    [Parameter]
+    public System.Action StartGame { get; set; }
+    [Parameter]
+    public System.Action<bool> LeaveLobby { get; set; }
+    [Parameter]
+    public System.Action DeleteGame { get; set; }
+
+    protected int GetProgressBar() {
+        return (int)Math.Ceiling(((double)Game.PlayersInLobby.Count / Game.PlayersLimit) * 100.0);
+    }
+
+    protected string GetUrl() {
+        return NavigationManager.BaseUri + Game.Code;
+    }
+
+    protected void SwitchTimer() {
+        Game.StoppedStartTimer = !Game.StoppedStartTimer;
+    }
+}

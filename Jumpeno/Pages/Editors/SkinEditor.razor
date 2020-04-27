@@ -1,0 +1,41 @@
+﻿@page "/skinEdit"
+@using Jumpeno.JumpenoComponents.Editors
+@using Jumpeno.JumpenoComponents.Entities
+@inherits SkinEditorBase
+@attribute [Authorize]
+
+<h2 class="mb-3 mt-2">Skin Editor</h2>
+<h4 class="mb-2">Name : @SkinName</h4>
+@foreach (var item in Skins) {
+    <option value="@item.Key" class="d-inline-block"
+            style="@item.Value.CssStyle" @onclick="@(() => OnSkinSelection(item.Key))">
+    </option>
+}
+
+<table class="table text-center mt-2">
+    <thead>
+        <tr>
+            <th scope="col">Idle</th>
+            <th scope="col">Walking</th>
+            <th scope="col">Falling</th>
+            <th scope="col">Death</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div style="@GetCurrentFrameStyle(State.IDLE) margin: auto;"></div>
+            </td>
+            <td>
+                <div style="@GetCurrentFrameStyle(State.WALKING) margin: auto;"></div>
+            </td>
+            <td>
+                <div style="@GetFirstFrameStyle(State.FALLING) margin: auto;"></div>
+            </td>
+            <td>
+                <div style="@GetFirstFrameStyle(State.DEAD) margin: auto;"></div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<button class="btn btn-success" @onclick="ChooseSkin">Select</button>

@@ -1,0 +1,196 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /*padding: 0;
+    margin: 0;
+    background-color: #2e294e;
+    background-image: radial-gradient(
+        #ffd400 6px,
+        transparent 6px);
+    background-size: 60px 60px;*/
+    background-image: url("../images/background.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+app {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1;
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+@media (max-width: 1049.98px) {
+    .platform {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        background: url("../images/tile.png") 0px 0px;
+    }
+    html {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+    }
+}
+
+@media (min-width: 1050px) {
+    
+    app {
+        flex-direction: row;
+    }
+
+    
+}
+.game{
+    /*background-color: navajowhite;*/
+}
+
+.platform {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    background: url("../images/tile.png") 0px 0px;
+}
+
+.title {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.507);
+    margin: 0;
+    padding: 0;
+    border: 1px solid rgba(255, 0, 0, 0.555);
+    top: 0px;
+    left: 0px;
+    width: 100px;
+    height: 40px;
+}
+
+.map {
+    position: relative;
+    margin: 0 auto;
+    background-color: rgb(36, 30, 59);
+    border: 2px solid black;
+    display: block;
+    overflow: hidden;
+}
+
+.tile {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    background: url("../images/big/tile.png") 0px 0px;
+}
+
+.player {
+    position: absolute;
+    background-color: deepskyblue;
+}
+
+.flippedHorizontal {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+.timer {
+    position: fixed;
+    left: 50%;
+    top: 0;
+    color: antiquewhite;
+}
+
+.leaderboard {
+    font-size: 1.2rem;
+    position: fixed;
+    background-color: #00000081;
+    margin: 0;
+    padding: 0;
+    border: 1px solid rgba(255, 0, 0, 0.644);
+    width: 18vw;
+    min-width: 100px;
+    top: 0px;
+    right: 0px;
+    height: 20vh;
+    min-height: 200px;
+    text-align: center;
+}
+
+    .leaderboard ol {
+        display: inline-block;
+    }
+
+.respawn {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
+.arrow_btn {
+    width: 64px;
+    height: 64px;
+    position: fixed;
+}
+
+.arrow_btn.arrow_left {
+    bottom: 0px;
+    left: 0px;
+    background: url("../images/small/arrow_left.png") 0px 0px;
+}
+
+.arrow_btn.arrow_right {
+    bottom: 0px;
+    left: 80px;
+    background: url("../images/small/arrow_right.png") 0px 0px;
+}
+
+.arrow_btn.arrow_up {
+    bottom: 0px;
+    right: 0px;
+    background: url("../images/small/arrow_up.png") 0px 0px;
+}
+
+.bg-form {
+    padding: 2%;
+    background-color: rgba(36, 30, 59, 0.8);
+    color: wheat;
+    border-radius: 10px;
+}
+
+.jumbotron {
+    background-color: rgba(36, 30, 59, 0.8);
+}

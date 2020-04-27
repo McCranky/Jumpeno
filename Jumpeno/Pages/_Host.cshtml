@@ -1,0 +1,75 @@
+﻿@page "/"
+@namespace Jumpeno.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jumpeno</title>
+    <base href="~/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link href="css/site.css" rel="stylesheet" />
+
+    @* Font Awesome *@
+    <script src="https://kit.fontawesome.com/f5507d44ff.js" crossorigin="anonymous"></script>
+
+    @*Syncfusion*@
+    <link href="https://cdn.syncfusion.com/ej2/17.4.55/material.css" rel="stylesheet" />
+    <script src="https://cdn.syncfusion.com/ej2/17.4.55/dist/ej2.min.js"></script>
+    <script src="https://cdn.syncfusion.com/ej2/17.4.55/dist/ejs.interop.min.js"></script>
+
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>*@
+
+    @* Bootstrap *@
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <script>
+        screen.orientation.lock("portrait-primary");
+    </script>
+    <app>
+        <component type="typeof(App)" render-mode="Server" />
+    </app>
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="_framework/blazor.server.js"></script>
+    <script>
+
+        window.WindowResized = (DotNetRef) => {
+            window.addEventListener("resize",
+                () => { DotNetRef.invokeMethodAsync('OnBrowserResize').then(data => data); });
+
+        }
+
+        window.GetSize = () => {
+            var x = window.innerWidth;
+            var y = window.innerHeight;
+            return [x, y];
+        };
+
+        window.SetFocusToGame = () => {
+            console.log("setting focus");
+            document.getElementById("game").focus();
+        };
+    </script>
+</body>
+</html>

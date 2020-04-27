@@ -1,0 +1,16 @@
+﻿@page "/logout"
+<h3>Logout</h3>
+@using Jumpeno.Services
+@using Jumpeno.JumpenoComponents
+@inject LocalStorageTrackingService LocalStorage
+@inject NavigationManager Navigation
+
+@code {      
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        await LocalStorage.RemoveItemValue(LocalStorageTrackingService.Item.PLAYER_LOGIN_METHOD);
+        await LocalStorage.RemoveItemValue(LocalStorageTrackingService.Item.GAME_CODE);
+        await LocalStorage.RemoveItemValue(LocalStorageTrackingService.Item.PLAYER_NAME);
+        await LocalStorage.RemoveItemValue(LocalStorageTrackingService.Item.PLAYER_SKIN);
+        Navigation.NavigateTo("Identity/Account/Login", true);
+    }
+}

@@ -1,0 +1,112 @@
+﻿@using Jumpeno.JumpenoComponents.Game
+@using Jumpeno.JumpenoComponents.Entities
+@using Jumpeno.JumpenoComponents.Utilities
+
+    <div class="container text-center bg-form">
+        <LoginDisplay />
+        <div class="jumbotron text-center">
+            <h1>Jumpeno</h1>
+            @if (Player.Spectator) {
+                <p>You are in spectator mode. <br />Refresh the page.</p>
+            }
+        </div>
+        @if (InitInfo.ErrorMessage != "") {
+            <div class="alert alert-warning alert-dismissible" aria-label="close">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                @InitInfo.ErrorMessage
+            </div>
+        }
+
+        @*<div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Nickname</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Slabko" aria-label="Default" aria-describedby="" @bind-value="@Player.Name">
+        </div>*@
+
+        <div class="input-group mb-4">
+            <input type="text" class="form-control" placeholder="Game code" aria-label="Game code" aria-describedby="" @bind-value="@InitInfo.GameCode">
+            <div class="input-group-append">
+                <button type="button" class="btn btn-success" @onclick="(() => JoinGame(false))">Join</button>
+            </div>
+        </div>
+        <hr class="mb-3" style="background-color: wheat;"/>
+        @if (!Player.Spectator) {
+            <div class="form-group br-left">
+                <label class="font-weight-bold">Game mode</label>
+                <select class="form-control">
+                    <option @onclick="@(() => SetMode(GameMode.PLAYER))">Player</option>
+                    <option @onclick="@(() => SetMode(GameMode.GUIDED))">Guided</option>
+                </select>
+                <p class="mt-2">@Description</p>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Game name</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Unnamed" aria-label="Unnamed" @bind-value="@InitInfo.GameName">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Players (@InitInfo.PlayersLimit)</span>
+                </div>
+                <input type="range" class="form-control" placeholder="Players Limit" aria-label="Players Limit" aria-describedby="" min="2" max="10" @bind-value="@InitInfo.PlayersLimit">
+            </div>
+
+            <button type="button" class="btn btn-danger" @onclick="@CreateGame">New Game</button>
+
+            @*<div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text">Mode: @InitInfo.GameModeToString()</label>
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <span class="dropdown-item" @onclick="@(() => SetMode(GameMode.PLAYER))">Player Mode</span>
+                        <span class="dropdown-item" @onclick="@(() => SetMode(GameMode.GUIDED))">Guided Mode</span>
+                    </div>
+                    <span class="input-group-text" id="inputGroup-sizing-default">Players: @InitInfo.PlayersLimit</span>
+                </div>
+                <input type="range" class="form-control" placeholder="Players Limit" aria-label="Players Limit" aria-describedby="" min="2" max="10" @bind-value="@InitInfo.PlayersLimit">
+                <input type="text" class="form-control" placeholder="Game name" aria-label="Game name" aria-describedby="" @bind-value="@InitInfo.GameName">
+                <div class="input-group-append">
+
+                    <button type="button" class="btn btn-danger" @onclick="@CreateGame">New Game</button>
+                </div>
+            </div>*@
+        }
+
+    </div>
+
+@code {
+    [Parameter]
+    public System.Action CreateGame { get; set; }
+    [Parameter]
+    public System.Action<bool> JoinGame { get; set; }
+    [Parameter]
+    public InitialisingInfo InitInfo { get; set; }
+    [Parameter]
+    public Player Player { get; set; }
+
+    public string Description { get; set; }
+
+    protected override void OnParametersSet() {
+        SetDescription();
+    }
+
+    protected void SetMode(GameMode mode) {
+        InitInfo.GameMode = mode;
+        SetDescription();
+    }
+
+    protected void SetDescription() {
+        if (InitInfo.GameMode == GameMode.PLAYER) {
+            Description = "Classic game mode.";
+        } else {
+            Description = "This game mode is meant to be used for presentation purposes. " +
+                    "All players are anonymous and the creator manages game flow.. ";
+        }
+    }
+}

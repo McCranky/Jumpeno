@@ -1,0 +1,26 @@
+﻿@if (Aer) {
+    <div class="tile"
+         style="top: @(Top * Size)px; left: @(Left * Size)px; background: @BackgroundColor"
+         @onclick="@(() => ChangeTile(Left, Top))">
+    </div>
+} else {
+    <div class="tile"
+         style="top: @(Top * Size)px; left: @(Left * Size)px;"
+         @onclick="@(() => ChangeTile(Left, Top))">
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string BackgroundColor { get; set; }
+    [Parameter]
+    public int Top { get; set; }
+    [Parameter]
+    public int Left { get; set; }
+    [Parameter]
+    public int Size { get; set; }
+    [Parameter]
+    public bool Aer { get; set; }
+    [Parameter]
+    public System.Action<int, int> ChangeTile { get; set; }
+}

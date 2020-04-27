@@ -1,0 +1,45 @@
+﻿@page "/"
+@page "/{GameCode}"
+@using Jumpeno.JumpenoComponents.Game
+@using Jumpeno.JumpenoComponents.Entities
+@inherits JumpenoIndexBase
+@*<h3>@Width:@Height</h3>*@
+@if (Game == null) {
+    <Welcome CreateGame="@CreateGame"
+             JoinGame="@JoinGame"
+             InitInfo="@InitInfo"
+             Player="@Player" />
+
+} else {
+    if (Game.GameState == GameState.LOBBY) {
+        <Lobby Game="@Game"
+               Player="@Player"
+               StartGame="@StartGame"
+               LeaveLobby="@LeaveLobby"
+               DeleteGame="@DeleteGame" />
+
+    } else {
+        if (Player.InGame || Player.Spectator) {
+            if (Game.GameState == GameState.COUNTDOWN ||
+                Game.GameState == GameState.SHRINKING ||
+                Game.GameState == GameState.GAMEOVER) {
+                <GameScreen Game="@Game"
+                            Player="@Player"
+                            VisibleComponents="@VisibleComponents"
+                            KeyUp="@KeyUp"
+                            KeyDown="@KeyDown"
+                            Respawn="@Respawn" />
+            } else {
+                <Scoreboard Game="@Game"
+                            Player="@Player" />
+            }
+        } else { // čakaju v lobby na skončenie hry
+            <Lobby Game="@Game"
+                   Player="@Player"
+                   StartGame="@StartGame"
+                   LeaveLobby="@LeaveLobby"
+                   DeleteGame="@DeleteGame" />
+        }
+    }
+
+}

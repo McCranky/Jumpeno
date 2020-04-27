@@ -1,0 +1,62 @@
+﻿@using Jumpeno.JumpenoComponents.Game
+@using Jumpeno.JumpenoComponents.Entities
+@using Jumpeno.JumpenoComponents.Utilities
+
+<div class="container text-center bg-form">
+    <div class="jumbotron">
+        <h2>Scoreboard</h2>
+        <p class="text-muted">Back to Lobby in @(Conversions.FramesToSec(Game.FramesToLobby))</p>
+    </div>
+    <table class="table mb-3" style="color: wheat;">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Kills</th>
+                <th scope="col">Last Standing</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Game.PlayersInGame.Count; i++) {
+                if (Game.PlayersInGame[i] == Player) {
+                    <tr class=" table-dark">
+                        <th scope="row">@(i + 1)</th>
+                        <td>@Player.Name</td>
+                        <td>@Player.Kills</td>
+                        @if (Player == Game.Winner) {
+                            <td><span class="badge badge-pill badge-warning">King of the Hill</span><i class="fas fa-crown"></i></td>
+                        } else {
+                            <td><i class="fas fa-candy-cane"></i></td>
+                        }
+                    </tr>
+                } else {
+                    <tr>
+                        <th scope="row">@(i + 1)</th>
+                        <td>@Game.PlayersInGame[i].Name</td>
+                        <td>@Game.PlayersInGame[i].Kills</td>
+                        @if (Game.PlayersInGame[i] == Game.Winner) {
+                            <td><span class="badge badge-pill badge-warning">King of the Hill</span><i class="fas fa-crown"></i></td>
+                        } else {
+                            <td><i class="fas fa-candy-cane"></i></td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    @if (Game.GameMode == GameMode.GUIDED && Player == Game.Creator) {
+        <button class="btn btn-light" @onclick="(() => Game.FramesToLobby = 0)">Skip Phase</button>
+        if (Game.ScoreboardTimerRunning) {
+            <button class="btn btn-light" @onclick="(() => Game.ScoreboardTimerRunning = false)">Freeze Countdown</button>
+        } else {
+            <button class="btn btn-light" @onclick="(() => Game.ScoreboardTimerRunning = true)">Resume Countdown</button>
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Game Game { get; set; }
+    [Parameter]
+    public Player Player { get; set; }
+}

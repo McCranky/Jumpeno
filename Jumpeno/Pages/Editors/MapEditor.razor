@@ -1,0 +1,71 @@
+﻿@page "/mapEdit"
+@using Jumpeno.JumpenoComponents.Editors
+@using Jumpeno.JumpenoComponents.Utilities
+@inherits MapEditorBase
+@attribute [Authorize]
+<h2 class="mb-2">Map Editor</h2>
+<MessageBox Show="ShowMessage" Message="@message" OnClick="DismissMessage" />
+<div class="input-group mb-2">
+    <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Editor options</label>
+    </div>
+    <select class="custom-select" id="inputGroupSelect01" @bind="EditorMode">
+        <option selected>Choose...</option>
+        <option value="1">Edit existing</option>
+        <option value="2" @onclick="EditorChange">Create new</option>
+    </select>
+</div>
+
+@if (EditorMode == 1) {
+    <select class="form-control mb-2" @bind="@MapPath">
+        <option selected value="">Choose...</option>
+        @foreach (var item in Maps) {
+            <option value="@item.Key" @onclick="OnMapSelect">@item.Value.Name</option>
+        }
+    </select>
+}
+@if (MapTemplate != null) {
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Name</span>
+        </div>
+        <input type="text" class="form-control" @bind-value="MapTemplate.Name">
+    </div>
+
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="">Dimensions [ Width : Height ]</span>
+        </div>
+        <input type="text" class="form-control text-center" value="16" disabled>
+        <input type="text" class="form-control text-center" value="9" disabled>
+    </div>
+
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Background color</span>
+        </div>
+        <input type="color" class="form-control" @bind-value="MapTemplate.BackgroundColor">
+    </div>
+
+    <h3 class="mb-2">@MapTemplate.Name</h3>
+    <div class="map mb-2" style="background-color: @MapTemplate.BackgroundColor; width: @(MapTemplate.Width*_TileSize)px; height: @(MapTemplate.Height*_TileSize)px;">
+        @for (int i = 0; i < MapTemplate.Width; i++) {
+            for (int j = 0; j < MapTemplate.Height; j++) {
+                if (MapTemplate.Tiles[Conversions.Map2DToIndex(i, j, MapTemplate.Width)]) {
+                    <Tile Top="j" Left="i" Size="_TileSize" ChangeTile="ChangeTile" Aer="false" />
+                } else {
+                    <Tile Top="j" Left="i " Size="_TileSize" ChangeTile="ChangeTile" Aer="true" BackgroundColor="@MapTemplate.BackgroundColor" />
+                }
+            }
+        }
+    </div>
+    <div class="btn-group mb-2">
+        <button class="btn btn-danger" @onclick="RemoveMap">Delete</button>
+        @if (EditorMode == 2) {
+            <button class="btn btn-success" @onclick="AddMap">Add</button>
+        } else {
+            <button class="btn btn-success" @onclick="SaveMap">Save</button>
+        }
+    </div>
+
+}

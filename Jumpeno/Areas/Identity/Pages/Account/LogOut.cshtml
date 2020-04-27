@@ -1,0 +1,14 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@using Jumpeno.Data
+@attribute [IgnoreAntiforgeryToken]
+@inject SignInManager<JumpenoUser> SignInManager
+@functions {
+    public async Task<IActionResult> OnPost() {
+        if (SignInManager.IsSignedIn(User)) {
+            await SignInManager.SignOutAsync();
+        }
+
+        return Redirect("~/logout");
+    }
+}

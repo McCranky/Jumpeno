@@ -1,0 +1,28 @@
+﻿@page "/redirection"
+@using Jumpeno.Services
+<h3>Redirection</h3>
+
+<button @onclick="Spectate">I want just to Spectate.</button>
+<button @onclick="Play">I want to Play!</button>
+@code { 
+    [Inject] protected LocalStorageTrackingService LocalStorage { get; set; }
+    [Inject] protected NavigationManager Navigation { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            string code = await LocalStorage.GetItemValue(LocalStorageTrackingService.Item.GAME_CODE);
+            if (String.IsNullOrEmpty(code)) {
+                Navigation.NavigateTo("Identity/Account/Login", true);
+            }
+        }
+    }
+
+    protected async Task Spectate() {
+        await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_LOGIN_METHOD, LocalStorageTrackingService.LogInMethod.SPECTATOR.ToString());
+        Navigation.NavigateTo("/");
+    }
+
+    protected void Play() {
+        Navigation.NavigateTo("Identity/Account/Login", true);
+    }
+}
