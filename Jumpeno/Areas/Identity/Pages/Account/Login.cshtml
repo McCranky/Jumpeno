@@ -66,12 +66,12 @@
                             <input type="submit" class="btn btn-info" asp-page-handler="AnonymousLogin" value="Anonym" />
                         </form>
                     </div>
-                    <div class="mb-2 d-inline-block">
+                    @*<div class="mb-2 d-inline-block">
                         <form method="post">
                             <i class="fas fa-user-secret"></i>
                             <input type="submit" class="btn btn-info" asp-page-handler="SpectatorLogin" value="Spectator" />
                         </form>
-                    </div>
+                    </div>*@
                     <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
                         <div>
                             <p>

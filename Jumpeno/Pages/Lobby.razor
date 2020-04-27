@@ -1,6 +1,7 @@
 ﻿@using Jumpeno.JumpenoComponents.Game
 @using Jumpeno.JumpenoComponents.Entities
 @using Jumpeno.JumpenoComponents.Utilities
+@using Jumpeno.Services
 @inject NavigationManager NavigationManager
 
     <div class="container text-center bg-form">
@@ -131,6 +132,13 @@
             </div>
         }
         <button type="button" class="btn btn-warning" @onclick="@(() => LeaveLobby(true))">Leave</button>
+        @if (LoginMethod != LocalStorageTrackingService.LogInMethod.SPECTATOR.ToString()) {
+            if (Player.Spectator) {
+                <button type="button" class="btn btn-info" @onclick="@SwitchSpectating">Join as player</button>
+            } else {
+                <button type="button" class="btn btn-info" @onclick="@SwitchSpectating">Spectate game</button>
+            }
+        }
     </div>
 
 @code {
@@ -138,6 +146,8 @@
     public Player Player { get; set; }
     [Parameter]
     public Game Game { get; set; }
+    [Parameter]
+    public string LoginMethod { get; set; }
     [Parameter]
     public System.Action StartGame { get; set; }
     [Parameter]
@@ -155,5 +165,20 @@
 
     protected void SwitchTimer() {
         Game.StoppedStartTimer = !Game.StoppedStartTimer;
+    }
+
+    protected void SwitchSpectating() {
+        bool result = false;
+        if (Player.Spectator) {
+            lock (Game) {
+                result = Game.AddPlayer(Player);
+            }
+        } else {
+            Game.RemovePlayer(Player);
+            result = true;
+        }
+        if (result) {
+            Player.Spectator = !Player.Spectator;
+        }
     }
 }

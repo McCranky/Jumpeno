@@ -127,6 +127,7 @@ namespace Jumpeno.JumpenoComponents.Game {
                     FramesToStart *= 2;
                 }
             }
+            player.InGame = false;
         }
 
         public void RespawnPlayer(Player player) {

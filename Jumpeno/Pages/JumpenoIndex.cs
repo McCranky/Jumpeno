@@ -55,6 +55,7 @@ namespace Jumpeno.Pages
         }
         public float Width { get; set; }
         public float Height { get; set; }
+        protected string LoginMethod { get; set; }
 
 
         //### Methods section ----------------------------------------------
@@ -79,6 +80,7 @@ namespace Jumpeno.Pages
                 await JsRuntime.InvokeAsync<object>("WindowResized", DotNetObjectReference.Create(this));
                 await OnBrowserResize();
 
+                LoginMethod = await LocalStorage.GetItemValue(LocalStorageTrackingService.Item.PLAYER_LOGIN_METHOD);
                 string code = await LocalStorage.GetItemValue(LocalStorageTrackingService.Item.GAME_CODE);
                 var user = (await authenticationStateTask).User;
 
@@ -89,17 +91,16 @@ namespace Jumpeno.Pages
                     await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_SKIN, activeUser.Skin);
                     await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_LOGIN_METHOD, LocalStorageTrackingService.LogInMethod.IDENTITY.ToString());
                 } else {
-                    string loginMethod = await LocalStorage.GetItemValue(LocalStorageTrackingService.Item.PLAYER_LOGIN_METHOD);
-                    if (String.IsNullOrEmpty(loginMethod)) {
+                    if (String.IsNullOrEmpty(LoginMethod)) {
                         if (!String.IsNullOrEmpty(GameCode)) {
                             await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.GAME_CODE, GameCode);
                         }
                         Navigation.NavigateTo("/redirection");
                         return;
-                    } else if (loginMethod == LocalStorageTrackingService.LogInMethod.ANONYM.ToString()) {
+                    } else if (LoginMethod == LocalStorageTrackingService.LogInMethod.ANONYM.ToString()) {
                         Player.Name = await LocalStorage.GetItemValue(LocalStorageTrackingService.Item.PLAYER_NAME);
                         Player.Skin = await LocalStorage.GetItemValue(LocalStorageTrackingService.Item.PLAYER_SKIN);
-                    } else if (loginMethod == LocalStorageTrackingService.LogInMethod.SPECTATOR.ToString()) {
+                    } else if (LoginMethod == LocalStorageTrackingService.LogInMethod.SPECTATOR.ToString()) {
                         if (String.IsNullOrEmpty(code)) {
                             Player.Spectator = false;
                             await LocalStorage.RemoveItemValue(LocalStorageTrackingService.Item.PLAYER_LOGIN_METHOD);
