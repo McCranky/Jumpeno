@@ -12,14 +12,11 @@
     [Parameter]
     public bool Spectator { get; set; }
 
-    public static readonly string[] _UserNames = { "Whistlejacket", "Niatross", "Exterminator", "Sunline", "Buckpasser", "Ajax", "Crisp", "Longfellow", "Nugget", "Inky", "Joker", "Kermit"};
-
-
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         Random rnd = new Random();
         if (!Spectator) {
             await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_LOGIN_METHOD, LocalStorageTrackingService.LogInMethod.ANONYM.ToString());
-            await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_NAME, _UserNames[rnd.Next(0, _UserNames.Length)]);
+            await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_NAME, Player._UserNames[rnd.Next(0, Player._UserNames.Length)]);
             await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_SKIN, Animation._Skins[rnd.Next(0, Animation._Skins.Length)]);
         } else {
             await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_LOGIN_METHOD, LocalStorageTrackingService.LogInMethod.SPECTATOR.ToString());

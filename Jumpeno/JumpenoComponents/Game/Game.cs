@@ -89,11 +89,6 @@ namespace Jumpeno.JumpenoComponents.Game {
                 } else { // Lobby
                     if (PlayersInLobby.Count < PlayersLimit) {
                         PlayersInLobby.Add(player);
-                        if (PlayersInLobby.Count == 1) {
-                            Creator = player;
-                        } else {
-                            FramesToStart /= 2;  
-                        }
                         return true;
                     }
                     return false;

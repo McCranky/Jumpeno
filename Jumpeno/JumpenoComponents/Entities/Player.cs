@@ -6,6 +6,7 @@ namespace Jumpeno.JumpenoComponents.Entities {
      * Reprezentuje telo hráča s ktorým sa pohybuje
      */
     public class Player : MoveableJumpenoComponent {
+        public static readonly string[] _UserNames = { "Whistlejacket", "Niatross", "Exterminator", "Sunline", "Buckpasser", "Ajax", "Crisp", "Longfellow", "Nugget", "Inky", "Joker", "Kermit"};
         public bool Spectator { get; set; } = false;
         public int Kills { get; set; }
         public bool Alive { get; set; }

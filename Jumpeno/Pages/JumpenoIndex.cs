@@ -31,6 +31,7 @@ namespace Jumpeno.Pages
 
         //### Variables section ---------------------
         private Game game;
+        private readonly Random rnd = new Random();
         protected InitialisingInfo InitInfo = new InitialisingInfo();
         protected List<JumpenoComponent> VisibleComponents = new List<JumpenoComponent>();
 
@@ -88,6 +89,7 @@ namespace Jumpeno.Pages
                     var activeUser = await UserManager.GetUserAsync(user);
                     Player.Name = activeUser.UserName;
                     Player.Skin = activeUser.Skin;
+                    await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_NAME, Player.Name);
                     await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_SKIN, activeUser.Skin);
                     await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.PLAYER_LOGIN_METHOD, LocalStorageTrackingService.LogInMethod.IDENTITY.ToString());
                 } else {
@@ -159,6 +161,10 @@ namespace Jumpeno.Pages
         }
 
         protected void LeaveLobby(bool invokeByPlayer = false) {
+            if (Player == Game?.Creator && Game.GameMode == GameMode.GUIDED) {
+                DeleteGame();
+                return;
+            }
             Game?.RemovePlayer(Player);
             LeaveGame();
             Game = null;
@@ -170,7 +176,12 @@ namespace Jumpeno.Pages
         protected void CreateGame() {
             if (MatchController.TryAddGame(InitInfo, out game)) {
                 OnLobbyJoin(false);
-                Game.AddPlayer(Player);
+                if (InitInfo.GameMode != GameMode.GUIDED) {
+                    Game.AddPlayer(Player);
+                } else {
+                    Game.Creator = Player;
+                    Player.InGame = true;
+                }
             } else {
                 InitInfo.ErrorMessage = "Game could not be created.";
             }
@@ -178,7 +189,7 @@ namespace Jumpeno.Pages
 
         protected void JoinGame(bool alreadyIn) {
             if (!MatchController.TryGetGame(GameCode, out game)) {
-                InitInfo.ErrorMessage = "Game with this name does not exist.";
+                InitInfo.ErrorMessage = "Game with this code does not exist.";
             } else {
                 if (!Player.Spectator) {
                     bool result;
@@ -196,7 +207,7 @@ namespace Jumpeno.Pages
                         }
                     }
                 } else {
-                    
+                    // in case some spectator limitation
                 }
                 OnLobbyJoin(alreadyIn);
             }
@@ -206,11 +217,14 @@ namespace Jumpeno.Pages
             Game.Start();
         }
         
-        protected void OnLobbyJoin(bool alreadyIn) {
+        protected async void OnLobbyJoin(bool alreadyIn) {
             if (!alreadyIn) {
-                Task.Run(async () => {
-                    await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.GAME_CODE, GameCode);
-                });
+                await LocalStorage.SetItemValue(LocalStorageTrackingService.Item.GAME_CODE, GameCode);
+            }
+            if (Game.GameMode == GameMode.GUIDED) {
+                Player.Name = Player._UserNames[rnd.Next(0, Player._UserNames.Length)];
+            } else {
+                Player.Name = await LocalStorage.GetItemValue(LocalStorageTrackingService.Item.PLAYER_NAME);
             }
             Game.OnTickReached += UpdateUi; // each time the game is updated, the browser window is also updated
             Navigation.NavigateTo(Navigation.BaseUri + GameCode);
