@@ -134,35 +134,9 @@ app {
     color: antiquewhite;
 }
 
-.leaderboard {
-    font-size: 1.2rem;
-    position: fixed;
-    background-color: #00000081;
-    margin: 0;
-    padding: 0;
-    border: 1px solid rgba(255, 0, 0, 0.644);
-    width: 18vw;
-    min-width: 100px;
-    top: 0px;
-    right: 0px;
-    height: 20vh;
-    min-height: 200px;
-    text-align: center;
-}
-
-    .leaderboard ol {
-        display: inline-block;
-    }
-
-.respawn {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-}
-
 .arrow_btn {
-    width: 64px;
-    height: 64px;
+    width: 80px;
+    height: 80px;
     position: fixed;
 }
 

@@ -1,12 +1,13 @@
 ﻿@page "/redirection"
 @using Jumpeno.Services
-<h3>Redirection</h3>
 
 <div class="container text-center bg-form">
     <div class="jumbotron text-center">
         <h1>Jumpeno</h1>
-        <h3>Redirection page</h3>
-        <a>Jumpeno is battle-royale type of game. Jumping is the key. Crush head of other players in order to win. Move your charaster with left, right arrow and jump with space. <br /> Goodl luck.</a>
+        <h4>Game Info</h4>
+        <p>Jumpeno is battle-royale type of game. Jumping is the key. Crush head of other players in order to win. <br />
+        On PC move your charaster with left, right arrow and jump with space. <br />
+        Mobile devices should be used as game controller while watching on friend's monitor. <br /> Goodl luck.</p>
     </div>
     @if (AvailableCode) {
         <button class="btn btn-info" @onclick="Spectate">I want just to Spectate.</button>

@@ -5,111 +5,90 @@
 <!-- prijimanie inputu, hra, leaderboard,... -->
 
 <div @key="@Game.GetKey"
-     class="game text-center"
-     style="@Game.CssStyle(Player.SmallScreen)"
-     @onkeydown="@KeyDown"
-     @onkeyup="@KeyUp"
-     tabindex="0"
-     id="game">
-
-    <!-- herna mapa -->
-    <div @key="@Game.Map.GetKey"
-         class="map"
-         style="@Game.Map.CssStyle(Player.SmallScreen)">
-
-        <!-- all components -->
-        @foreach (var component in VisibleComponents) {
-            @if (component is Player) {
-                if ((Player)component == Player) {
-                    <div @key="@component.GetKey"
-                         class="@component.CssClass"
-                         style="@(((Player)component).CssStyle(Player.SmallScreen))">
-                        <i class="fas fa-caret-down fa-1x" style="color: yellow; position: relative; top: -30%;"></i>
-                    </div>
-                } else {
-                    <div @key="@component.GetKey"
-                         class="@component.CssClass"
-                         style="@(((Player)component).CssStyle(Player.SmallScreen))">
-                        @if (component.FacingRight) {
-                            <p class="flippedHorizontal" style="color: yellow; position: relative; top: -30%;">@component.Name</p>
-                        } else {
-                            <p style="color: yellow; position: relative; top: -30%;">@component.Name</p>
-                        }
-                        
-                    </div>
-                }
-            } else {
-                <div @key="@component.GetKey"
-                     class="@component.CssClass"
-                     style="@component.CssStyle(Player.SmallScreen)">
-                </div>
-            }
-        }
-
-    </div>
-
-    @*<div class="title">
-        <span>#Jumpeno</span>
-    </div>*@
-
-    <div class="timer">
-        @if (Game.GameState == GameState.COUNTDOWN) {
-            <h4>@Conversions.FramesToTime(Game.FramesToShrink)</h4>
-        } else if (Game.GameState == GameState.SHRINKING) {
-            <h4>Shrinking...</h4>
-        } else if (Game.GameState == GameState.GAMEOVER) {
-            <h1 style="color: orangered;">Game over</h1>
-            <h3>@Conversions.FramesToSec(Game.FramesToScoreboard)</h3>
-        }
-    </div>
-
-    <!-- Top right: leaderboard. -->
-    @*<div class="leaderboard">
-        <ol>
-            @foreach (var player in Game.Map.Leaderboard) {
-                if (player == Player) {
-                    <li><mark><span>@player.Name @player.Kills.ToString() @(player.Alive ? "T" : "F")</span></mark></li>
-                } else {
-                    <li><span>@player.Name @player.Kills.ToString() @(player.Alive ? "T" : "F")</span></li>
-                }
-            }
-        </ol>
-    </div>*@
+        class="game text-center"
+        style="@Game.CssStyle(Player.SmallScreen)"
+        @onkeydown="@KeyDown"
+        @onkeyup="@KeyUp"
+        tabindex="0"
+        id="game">
 
     @if (Player.SmallScreen) {
-        @*<img src="images/small/arrow_left.png" @ontouchstart="() => Left(false)" @ontouchend="() => Left(true)" class="arrow_btn arrow_left"/>
-        <img src="images/small/arrow_right.png" @ontouchstart="() => Right(false)" @ontouchend="() => Right(true)" class="arrow_btn arrow_right"/>
-        <img src="images/small/arrow_up.png" @ontouchstart="() => Up(false)" @ontouchend="() => Up(true)" class="arrow_btn arrow_up"/>*@
-
         <div class="arrow_btn arrow_left" @ontouchstart="() => Left(false)" @ontouchend="() => Left(true)"></div>
         <div class="arrow_btn arrow_right" @ontouchstart="() => Right(false)" @ontouchend="() => Right(true)"></div>
         <div class="arrow_btn arrow_up" @ontouchstart="() => Up(false)" @ontouchend="() => Up(true)"></div>
-    }
+    } else {
+        <!-- herna mapa -->
+        <div @key="@Game.Map.GetKey"
+                class="map"
+                style="@Game.Map.CssStyle(Player.SmallScreen)">
 
-    @if (Game.GameMode == GameMode.GUIDED && Player == Game.Creator) {
-        <div class="btn-group mt-3">
-            @if (Game.GameState == GameState.COUNTDOWN) {
-                <button class="btn btn-light" @onclick="(() => Game.GameState = GameState.SHRINKING)">Skip Phase</button>
-                if (Game.CountdownTimerRunning) {
-                    <button class="btn btn-light" @onclick="(() => Game.CountdownTimerRunning = false)">Freeze Countdown</button>
+            <!-- all components -->
+            @foreach (var component in VisibleComponents) {
+                @if (component is Player) {
+                    if ((Player)component == Player) {
+                        <div @key="@component.GetKey"
+                                class="@component.CssClass"
+                                style="@(((Player)component).CssStyle(Player.SmallScreen))">
+                            <i class="fas fa-caret-down fa-1x" style="color: yellow; position: relative; top: -30%;"></i>
+                        </div>
+                    } else {
+                        <div @key="@component.GetKey"
+                                class="@component.CssClass"
+                                style="@(((Player)component).CssStyle(Player.SmallScreen))">
+                            @if (component.FacingRight) {
+                                <p class="flippedHorizontal" style="color: yellow; position: relative; top: -30%;">@component.Name</p>
+                            } else {
+                                <p style="color: yellow; position: relative; top: -30%;">@component.Name</p>
+                            }
+
+                        </div>
+                    }
                 } else {
-                    <button class="btn btn-light" @onclick="(() => Game.CountdownTimerRunning = true)">Resume Countdown</button>
-                }
-            } else if (Game.GameState == GameState.SHRINKING) {
-                if (Game.ShrinkingAllowed) {
-                    <button class="btn btn-light" @onclick="(() => Game.ShrinkingAllowed = false)">Stop Shrinking</button>
-                } else {
-                    <button class="btn btn-light" @onclick="(() => Game.ShrinkingAllowed = true)">Start Shrinking</button>
-                }
-            } else if (Game.GameState == GameState.GAMEOVER) {
-                <button class="btn btn-light" @onclick="(() => Game.FramesToScoreboard = 0)">Skip Phase</button>
-                if (Game.GameoverTimerRunning) {
-                    <button class="btn btn-light" @onclick="(() => Game.GameoverTimerRunning = false)">Freeze Countdown</button>
-                } else {
-                    <button class="btn btn-light" @onclick="(() => Game.GameoverTimerRunning = true)">Resume Countdown</button>
+                    <div @key="@component.GetKey"
+                            class="@component.CssClass"
+                            style="@component.CssStyle(Player.SmallScreen)">
+                    </div>
                 }
             }
+
         </div>
+
+        <div class="timer">
+            @if (Game.GameState == GameState.COUNTDOWN) {
+                <h4>@Conversions.FramesToTime(Game.FramesToShrink)</h4>
+            } else if (Game.GameState == GameState.SHRINKING) {
+                <h4>Shrinking...</h4>
+            } else if (Game.GameState == GameState.GAMEOVER) {
+                <h1 style="color: orangered;">Game over</h1>
+                <h3>@Conversions.FramesToSec(Game.FramesToScoreboard)</h3>
+            }
+        </div>
+
+        @if (Game.GameMode == GameMode.GUIDED && Player == Game.Creator) {
+            <div class="btn-group mt-3">
+                @if (Game.GameState == GameState.COUNTDOWN) {
+                    <button class="btn btn-light" @onclick="(() => Game.GameState = GameState.SHRINKING)">Skip Phase</button>
+                    if (Game.CountdownTimerRunning) {
+                        <button class="btn btn-light" @onclick="(() => Game.CountdownTimerRunning = false)">Freeze Countdown</button>
+                    } else {
+                        <button class="btn btn-light" @onclick="(() => Game.CountdownTimerRunning = true)">Resume Countdown</button>
+                    }
+                } else if (Game.GameState == GameState.SHRINKING) {
+                    if (Game.ShrinkingAllowed) {
+                        <button class="btn btn-light" @onclick="(() => Game.ShrinkingAllowed = false)">Stop Shrinking</button>
+                    } else {
+                        <button class="btn btn-light" @onclick="(() => Game.ShrinkingAllowed = true)">Start Shrinking</button>
+                    }
+                } else if (Game.GameState == GameState.GAMEOVER) {
+                    <button class="btn btn-light" @onclick="(() => Game.FramesToScoreboard = 0)">Skip Phase</button>
+                    if (Game.GameoverTimerRunning) {
+                        <button class="btn btn-light" @onclick="(() => Game.GameoverTimerRunning = false)">Freeze Countdown</button>
+                    } else {
+                        <button class="btn btn-light" @onclick="(() => Game.GameoverTimerRunning = true)">Resume Countdown</button>
+                    }
+                }
+            </div>
+        }
     }
 </div>
 
