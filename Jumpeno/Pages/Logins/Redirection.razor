@@ -4,10 +4,16 @@
 <div class="container text-center bg-form">
     <div class="jumbotron text-center">
         <h1>Jumpeno</h1>
-        <h4>Game Info</h4>
-        <p>Jumpeno is battle-royale type of game. Jumping is the key. Crush head of other players in order to win. <br />
-        On PC move your charaster with left, right arrow and jump with space. <br />
-        Mobile devices should be used as game controller while watching on friend's monitor. <br /> Goodl luck.</p>
+        <hr style="background-color: azure;" />
+        <div style="color: azure;">
+            <h3>Game Info</h3>
+            <p>
+                Jumpeno is battle-royale type of game. Jumping is the key. Crush head of other players in order to win. <br />
+                On PC move your charaster with left, right arrow and jump with space.
+            </p>
+        </div>
+        <p class="text-warning">Mobile devices should be used as game controller while watching on friend's monitor. </p>
+        <p class="text-success">Good luck.</p>
     </div>
     @if (AvailableCode) {
         <button class="btn btn-info" @onclick="Spectate">I want just to Spectate.</button>
