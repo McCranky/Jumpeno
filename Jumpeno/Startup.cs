@@ -9,6 +9,7 @@ using Jumpeno.JumpenoComponents;
 using Blazored.SessionStorage;
 using Jumpeno.Services;
 using Jumpeno.JumpenoComponents.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Jumpeno {
     public class Startup {
@@ -25,6 +26,7 @@ namespace Jumpeno {
                 options.UseSqlite("DataSource=jumpeno.db"));
 
             services.AddDefaultIdentity<JumpenoUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<JumpenoDbContext>();
 
             services.AddAuthentication().AddFacebook(facebookOptions => {

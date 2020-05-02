@@ -14,10 +14,6 @@ namespace Jumpeno.JumpenoComponents.Editors {
      * Umožňuje vytvárať, editovať a mazať mapy.
      */
     public class MapEditorBase : ComponentBase {
-        [CascadingParameter] 
-        Task<AuthenticationState> AuthenticationStateTask { get; set; }
-        [Inject] protected NavigationManager Navigation { get; set; }
-        private string[] adminNames = { "Cranky"};
         public Dictionary<string, MapTemplate> Maps { get; set; }
         public const int _TileSize = Map._TileSize;
         public bool ShowMessage { get; set; }
@@ -28,15 +24,6 @@ namespace Jumpeno.JumpenoComponents.Editors {
         public MapEditorBase() { 
             Maps = new Dictionary<string, MapTemplate>();
             LoadMaps("./wwwroot/MapTemplates");
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender) {
-            if (firstRender) {
-                var user = (await AuthenticationStateTask).User;
-                if (!adminNames.Contains(user.Identity.Name)){
-                    Navigation.NavigateTo("/");
-                }
-            }
         }
 
         private void LoadMaps(string directoryPath) {
