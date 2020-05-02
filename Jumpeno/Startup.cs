@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Jumpeno.Data;
 using Jumpeno.JumpenoComponents;
-using Syncfusion.EJ2.Blazor;
 using Blazored.SessionStorage;
 using Jumpeno.Services;
 using Jumpeno.JumpenoComponents.Entities;
@@ -52,17 +51,12 @@ namespace Jumpeno {
             services.AddSingleton<MatchController>();
             services.AddScoped<Player>();
 
-            services.AddSyncfusionBlazor();
-
             services.AddBlazoredSessionStorage();
             services.AddScoped<LocalStorageTrackingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
-            //Register Syncfusion license
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjIyMDg2QDMxMzcyZTM0MmUzMGk3bmVDSmJDRStINlZqbGs5WFZWcTBjdDFWMGRVQUpZL1lSUktJa0h5NUE9");
-
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();

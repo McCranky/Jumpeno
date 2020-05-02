@@ -8,36 +8,26 @@
         <LoginDisplay />
         <div class="jumbotron text-center align-content-center">
             <h3>Lobby of "@Game.Name" - <span class="text-muted h4">@(InitialisingInfo.GameModeToString(Game.GameMode)) mode</span></h3>
-            <div class="d-flex">
-                <ul class="list-inline mx-auto justify-content-center" style="width: 50%;">
-                    <li>
-                        <div class="input-group p-1">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text" id="btnGroupAddon">Game code</div>
-                            </div>
-                            <p class="form-control">@Game.Code</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="input-group p-1">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text" id="btnGroupAddon">Game url</div>
-                            </div>
-                            <p class="form-control">@GetUrl()</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="input-group p-1">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text" id="btnGroupAddon">QR code</div>
-                            </div>
-                            <EjsQRCodeGenerator Width="150px" Height="150px" Value="@GetUrl()">
-                                <QRCodeGeneratorDisplayText Visibility="false"></QRCodeGeneratorDisplayText>
-                            </EjsQRCodeGenerator>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+
+            <table class="table" style="color: wheat;">
+                <tr>
+                    <th scope="row">Game code</th>
+                    <td>@Game.Code</td>
+                </tr>
+                <tr class="mb-5">
+                    <th scope="row">Game url</th>
+                    <td><a href="@GetUrl()">@GetUrl()</a></td>
+                </tr>
+                <tr>
+                    <th scope="row" style="vertical-align: middle;">QR code</th>
+                    <td>
+                        <img src="@GetQRCode()" alt="QRcode" title="@GetUrl()" width="150" height="150" />
+                    </td>
+                </tr>
+            </table>
+            
+            <hr class="mb-3" style="background-color: wheat;" />
+
             @*<p class="text-muted">Game alive @Game.FramesToTime(Game.FPSElapsed)</p>*@
             @if (Game.StartTimerRunning && !Game.StoppedStartTimer) {
                 <p class="text-info">Game starting in @Conversions.FramesToTime(Game.FramesToStart)</p>
@@ -90,26 +80,6 @@
             </tbody>
         </table>
 
-
-        @*<ul class="mb-3">
-            @foreach (var player in Game.PlayersInLobby) {
-                <li>
-                    @if (player == Player) {
-                        <mark>@player.Name</mark>
-                    } else {
-                        if (player.InGame) {
-                            @player.Name <span class="badge badge-pill badge-info">In game</span>
-                        } else {
-                            @player.Name
-                        }
-                    }
-                    @if (player == Game.Creator) {
-                        <span class="badge badge-pill badge-dark">Owner</span>
-                    }
-                </li>
-            }
-        </ul>*@
-
         @if (Game.Creator == Player) {
             <div class="btn-group" role="group" aria-label="Creator options">
                 @if (Game.PlayersInLobby.Count > 1) {
@@ -161,6 +131,10 @@
 
     protected string GetUrl() {
         return NavigationManager.BaseUri + Game.Code;
+    }
+
+    protected string GetQRCode() {
+        return "https://api.qrserver.com/v1/create-qr-code/?data=" + GetUrl() + "&amp;size=150x150";
     }
 
     protected void SwitchTimer() {
