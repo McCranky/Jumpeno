@@ -127,8 +127,7 @@ namespace Jumpeno.Pages
             }
         }
 
-        public void Dispose() { //TODO ak iba refreshuje stranku tak LeaveLobby odobere hrača z hry a už sa do nej nemože vratiť
-            //LeaveGame();
+        public void Dispose() {
             LeaveLobby();
         }
 
@@ -136,7 +135,7 @@ namespace Jumpeno.Pages
             if (Game != null) {
                 Game.OnTickReached -= UpdateUi;
                 Task.Run(async () => {
-                    await LocalStorage.RemoveItemValue(LocalStorageTrackingService.Item.GAME_CODE); //TODO nemaže
+                    await LocalStorage.RemoveItemValue(LocalStorageTrackingService.Item.GAME_CODE);
                 });
                 GameCode = null;
             }
@@ -258,11 +257,9 @@ namespace Jumpeno.Pages
 
         protected void KeyDown(KeyboardEventArgs e) {
             switch (e.Key) {
-                case "d":
                 case "ArrowRight":
                     Player.SetMovement(MovementAction.RIGHT, true);
                     break;
-                case "a":
                 case "ArrowLeft":
                     Player.SetMovement(MovementAction.LEFT, true);
                     break;
@@ -274,17 +271,9 @@ namespace Jumpeno.Pages
 
         protected void KeyUp(KeyboardEventArgs e) {
             switch (e.Key) {
-                //case "w":
-                //    Player.SetMovement(JumpenoComponents.Action.UP, false);
-                //    break;
-                case "d":
                 case "ArrowRight":
                     Player.SetMovement(MovementAction.RIGHT, false);
                     break;
-                //case "s":
-                //    Player.SetMovement(JumpenoComponents.Action.DOWN, false);
-                //    break;
-                case "a":
                 case "ArrowLeft":
                     Player.SetMovement(MovementAction.LEFT, false);
                     break;

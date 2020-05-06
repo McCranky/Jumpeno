@@ -33,7 +33,6 @@ namespace Jumpeno.JumpenoComponents.Entities {
         }
 
         public virtual async Task Update(int fpsTickNum) {
-            //TO DO some stuff if needed
             Animation?.Update(fpsTickNum);
             await Task.CompletedTask;
         }

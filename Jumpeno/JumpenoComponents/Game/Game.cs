@@ -10,7 +10,7 @@ namespace Jumpeno.JumpenoComponents.Game {
     }
 
     public enum GameState {
-        INITIALISING, LOBBY, COUNTDOWN, SHRINKING, GAMEOVER, SCOREBOARD, DELETED
+        LOBBY, COUNTDOWN, SHRINKING, GAMEOVER, SCOREBOARD, DELETED
     }
 
     public class GameTickEventArgs : EventArgs {

@@ -39,12 +39,6 @@ namespace Jumpeno {
                 googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             });
 
-            //services.AddAuthentication()
-            //    .Services.ConfigureApplicationCookie(options => {
-            //        options.SlidingExpiration = true;
-            //        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-            //    });
-
             services.AddRazorPages();
             services.AddServerSideBlazor();
 

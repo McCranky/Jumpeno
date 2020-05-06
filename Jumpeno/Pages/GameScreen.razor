@@ -116,16 +116,16 @@
 
     protected void Left(bool release) {
         if (release) {
-            KeyUp(new KeyboardEventArgs() { Key = "a" });
+            KeyUp(new KeyboardEventArgs() { Key = "ArrowLeft" });
         } else {
-            KeyDown(new KeyboardEventArgs() { Key = "a" });
+            KeyDown(new KeyboardEventArgs() { Key = "ArrowLeft" });
         }
     }
     protected void Right(bool release) {
         if (release) {
-            KeyUp(new KeyboardEventArgs() { Key = "d" });
+            KeyUp(new KeyboardEventArgs() { Key = "ArrowRight" });
         } else {
-            KeyDown(new KeyboardEventArgs() { Key = "d" });
+            KeyDown(new KeyboardEventArgs() { Key = "ArrowRight" });
         }
     }
     protected void Up(bool release) {
